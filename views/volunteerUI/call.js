@@ -1,9 +1,11 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable prettier/prettier */
+
 import React, { Component } from 'react';
-import { View, StyleSheet, NativeModules, ScrollView, Text, Dimensions, TouchableOpacity, Button } from 'react-native';
+import { View, StyleSheet, NativeModules, ScrollView, Text, Dimensions, TouchableOpacity } from 'react-native';
 import { RtcEngine, AgoraView } from 'react-native-agora';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import * as Speech from 'expo-speech';
-//import Modal from 'react-native-modal';
+
 
 const { Agora } = NativeModules;                  //Define Agora object as a native module
 
@@ -22,12 +24,9 @@ export default class call extends Component {
       uid: Math.floor(Math.random() * 100),       //Generate a UID for local user
       appid: this.props.navigation.state.params.id,                    //Enter the App ID generated from the Agora Website
       channelName: this.props.navigation.state.params.room,        //Channel Name for the current session
-      vidMute: false,                             //State variable for Video Mute
+      vidMute: true,                             //State variable for Video Mute
       audMute: false,                             //State variable for Audio Mute
-      joinSucceed: false,   
-      empty:true,                      //State variable for storing success
-      token:this.props.navigation.state.params.token,
-      isModalVisible: false,
+      joinSucceed: false,                         //State variable for storing success
     };
     const config = {                            //Setting config of the app
       appid: this.state.appid,                  //App ID
@@ -44,13 +43,9 @@ export default class call extends Component {
     };
     RtcEngine.init(config);                     //Initialize the RTC engine
   }
-  componentDidMount=async()=> {
-    
-    
+  componentDidMount() {
+    console.log('roomV',this.state.channelName)
     RtcEngine.on('userJoined', (data) => {
-      this.setState({empty:false})
-      console.log("empty", this.state.empty)
-      //Speech.speak('someone enters the call')
       const { peerIds } = this.state;             //Get currrent peer IDs
       if (peerIds.indexOf(data.uid) === -1) {     //If new user has joined
         this.setState({
@@ -60,7 +55,6 @@ export default class call extends Component {
     });
     RtcEngine.on('userOffline', (data) => {       //If user leaves
       this.endCall()
-      this.toggleModal()
       this.setState({
         peerIds: this.state.peerIds.filter(uid => uid !== data.uid), //remove peer ID from state array
       });
@@ -73,23 +67,6 @@ export default class call extends Component {
     });
     RtcEngine.joinChannel(this.state.channelName, this.state.uid);  //Join Channel
     RtcEngine.enableAudio();                                        //Enable the audio
-    RtcEngine.switchCamera();
-    //RtcEngine.destroy()
-
-    await fetch('https://assistance-system-back-end.herokuapp.com/User/notifications', {
-      method: 'POST',
-      headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          'token':this.state.token
-        },
-        body: JSON.stringify({
-          room:this.state.channelName
-        }),
-  })
-
-  //const resJ= await res.json()
-  console.log('roomB',this.state.channelName)
   }
   /**
   * @name toggleAudio
@@ -123,16 +100,6 @@ export default class call extends Component {
     RtcEngine.destroy();
     this.props.navigation.goBack()
   }
-
-  toggleModal = () => {
-    this.setState({isModalVisible: !this.state.isModalVisible});
-  };
-
-  rating = (number) =>{
-    console.log(number)
-    this.endCall()
-  }
-  
   /**
   * @name peerClick
   * @description Function to swap the main peer videostream with a different peer videostream
@@ -153,7 +120,7 @@ export default class call extends Component {
   */
   videoView() {
     return (
-        <View style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
         {
           this.state.peerIds.length > 1
             ? <View style={{ flex: 1 }}>
@@ -183,7 +150,12 @@ export default class call extends Component {
               </View>
               : <Text>No users connected</Text>
         }
-        <View style={styles.buttonBar}>
+        {
+          !this.state.vidMute                                              //view for local video
+            ? <AgoraView style={styles.localVideoStyle} zOrderMediaOverlay={true} showLocalVideo={true} mode={1} />
+            : <View />
+        }
+        {/* <View style={styles.buttonBar}>
           <Icon.Button style={styles.iconStyle}
             backgroundColor="#0093E9"
             name={this.state.audMute ? 'mic-off' : 'mic'}
@@ -199,7 +171,13 @@ export default class call extends Component {
             name={this.state.vidMute ? 'videocam-off' : 'videocam'}
             onPress={() => this.toggleVideo()}
           />
-        </View>
+        </View> */}
+
+        <TouchableOpacity onPress={()=>this.endCall()}
+          style={styles.endCallButton}>
+            <Text style={styles.endText}>اققل المكالمه</Text>
+        </TouchableOpacity>
+        
       </View>
     );
   }
@@ -242,4 +220,24 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     borderRadius: 0,
   },
-})
+  endCallButton:{
+    height:'15%',
+    backgroundColor:'#000000',
+    width:'100%',
+    //borderRadius:5,
+    justifyContent:'center',
+    alignItems:'center',
+   // margin:2
+   position:'absolute',
+   bottom:0
+    
+  },
+  endText:{
+    fontSize:40,
+    color:'#dddddd'
+  },
+  upView:{
+    width:'100%',
+    height:'85%'
+  }
+});

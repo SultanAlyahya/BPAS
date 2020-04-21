@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {isModelReady, getReady} from './ObjectRecognition'
+import requestCameraAndAudioPermission from './permission'
 
 export default class blindHomePage extends React.Component{
     constructor(props) {
@@ -10,6 +11,11 @@ export default class blindHomePage extends React.Component{
             token:this.props.navigation.state.params.token,
             room:''
         };
+        if (Platform.OS === 'android') {                    //Request required permissions from Android
+            requestCameraAndAudioPermission().then(_ => {
+              console.log('requested!');
+            });
+          }
       }
     async componentDidMount() {
         try{
@@ -20,15 +26,14 @@ export default class blindHomePage extends React.Component{
         }catch(error){
             console.log(error)
         }
-        
         var room=""
         for(var i=1;i<=5;i++){
             room=room+this.state.token[this.state.token.length-i]
         }
-        console.log('room',room)
-         this.setState({room:room})
-     }
-          
+        this.setState({room:room})
+        console.log('the room',this.state.room)
+        console.log('the token', this.state.token)
+    }
           
     render(){
         return(

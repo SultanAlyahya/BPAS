@@ -2,9 +2,9 @@ import React from 'react';
 import { View,Text, StyleSheet, TouchableOpacity, ImageBackground, Settings, Image, TextInput} from 'react-native';
 import {saveUserdata, retrieveData} from '../db/Userdb'
 // import {Text} from '@material-ui/core'
-import {saveData} from '../db/Userdb'
-
 import PushNotification from "react-native-push-notification";
+
+
 
 export default class login extends React.Component{
     constructor(props) {
@@ -32,7 +32,7 @@ export default class login extends React.Component{
             this.setState({notificationToken:token.token})
           },
           // Android only
-          senderID: "170601632573",
+          senderID: "411311542797",
           // iOS only
           permissions: {
             alert: true,
@@ -44,7 +44,9 @@ export default class login extends React.Component{
   
         })
         
-    }
+    }   
+
+    
 
       //the function is async becuase in this function there will be a data the will get sometime to come like get data from server
     savelogin= async(email, password)=>{
@@ -99,7 +101,6 @@ export default class login extends React.Component{
               }),
         })
         if(res.status !== 200){
-            console.log(res.status)
             this.setState({
                 errorLogin:'البريد الإلكتروني/ الرقم السري غير صحيح'
             })
@@ -109,14 +110,18 @@ export default class login extends React.Component{
                 errorLogin:''
             })
             const resJ = await res.json()
-            console.log(await saveData(res.headers.map.token, Platform.OS))
-            console.log(resJ.calls)
+        
+            console.log(resJ)
         //console.log(res.headers.map.token)
             this.props.navigation.navigate('volunteerHomePageP', {
                 token: res.headers.map.token,
-                name:resJ.name,
-                calls:resJ.calls,
-                rate:resJ.rate
+                name: resJ.name,
+                call: resJ.call,
+                rating: resJ.rating,
+                numberOfBlindPeople: resJ.numberOfBlindPeople,
+                numberOfCalls: resJ.numberOfCalls,
+                numberOfActiveVolunteers: resJ.numberOfActiveVolunteers,
+                numberOfVolunteers: resJ.numberOfVolunteers
             })
         }
     }catch(error){

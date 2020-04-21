@@ -7,8 +7,6 @@ import { Ionicons } from '@expo/vector-icons';
 import settings from './volunteerSettings'
 //import { Ionicons } from '@expo/vector-icons';
 
-import {retrieveData} from '../db/Userdb'
-
 import { PieChart } from 'react-native-svg-charts'
 import { Text as TextAsg} from 'react-native-svg'
 //import styles from '../styles';
@@ -19,29 +17,32 @@ export class volunteerHomePage extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            token:this.props.navigation.state.params.token || true,
-            name:this.props.navigation.state.params.name || true,
-            calls:this.props.navigation.state.params.calls ,
-            rate:this.props.navigation.state.params.rate,
-            call: 'Enable'
+            token:this.props.navigation.state.params.token || 'true',
+            name:this.props.navigation.state.params.name || 'true',
+            rating:this.props.navigation.state.params.rating || 0,
+            call: this.props.navigation.state.params.call,
+            numberOfBlindPeople: this.props.navigation.state.params.numberOfBlindPeople || 0,
+            numberOfCalls: this.props.navigation.state.params.numberOfCalls || 0,
+            numberOfActiveVolunteers: this.props.navigation.state.params.numberOfActiveVolunteers || 0,
+            numberOfVolunteers: this.props.navigation.state.params.numberOfVolunteers || 0
+
         }
     }
-     async componentDidMount() {
+    // async componentDidMount() {
     //     console.log(this.state.calls)
     //     console.log(this.state.rate)
     //     console.log(this.state.token)
-        console.log(await retrieveData())
-          }
+    //       }
     render(){
         const data = [
             {
                 key: 1,
-                amount: 334,
+                amount: this.state.numberOfVolunteers,
                 svg: { fill: '#0000ff' },
             },
             {
                 key: 2,
-                amount: 532,
+                amount: this.state.numberOfBlindPeople,
                 svg: { fill: '#00ff00' }
             },
         ]
@@ -117,19 +118,19 @@ export class volunteerHomePage extends React.Component{
                 <View style={styles.settings}>
                     <View style={styles.settingsBox}>
                         <View style={styles.topText}><Text style={styles.text}> calls received</Text></View>
-                        <View style={styles.buttomText}><Text style={styles.text}>{this.state.calls}</Text></View>
+                        <View style={styles.buttomText}><Text style={styles.text}>{this.state.numberOfCalls}</Text></View>
                     </View>
                     <View style={styles.settingsBox}>
                         <View style={styles.topText}><Text style={styles.text}>Rating</Text></View>
-                        <View style={styles.buttomText}><Text style={styles.text}>5/{this.state.rate}</Text></View>
+                        <View style={styles.buttomText}><Text style={styles.text}>5/{this.state.rating}</Text></View>
                     </View>
                     <View style={styles.settingsBox}>
                         <View style={styles.topText}><Text style={styles.text}> calls</Text></View>
-                        <View style={this.state.call === 'Enable'? styles.callsEnabel : styles.callsDisabel}><Text style={styles.text}>{this.state.call}</Text></View>
+                        <View style={this.state.call? styles.callsEnabel : styles.callsDisabel}><Text style={styles.text}>{this.state.call? 'Calls enabled':'Calls disabled'}</Text></View>
                     </View>
                     <View style={styles.settingsBox}>
                         <View style={styles.topText}><Text style={styles.text}>active volunteers</Text></View>
-                        <View style={styles.buttomText}><Text style={styles.text}>0</Text></View>
+                        <View style={styles.buttomText}><Text style={styles.text}>{this.state.numberOfActiveVolunteers}</Text></View>
                     </View>
                 </View>
             </View>
@@ -279,6 +280,7 @@ const styles = StyleSheet.create({
     text:{
         fontSize:30,
         color:'#35363D',
+        textAlign:'center'
     },
     statesticText:{
         fontSize:50,

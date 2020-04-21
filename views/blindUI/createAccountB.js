@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Settings, Image, TextInput} from 'react-native';
 import {saveUserdata, retrieveData} from '../db/Userdb'
 
+import PushNotification from "react-native-push-notification";
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
 
 export default class creatAccountB extends React.Component{
     constructor(props) {
@@ -15,6 +17,31 @@ export default class creatAccountB extends React.Component{
             errorLogin:''
         };
       }
+
+      componentDidMount(){
+              
+        PushNotification.configure({
+          
+                    // (optional) Called when Token is generated (iOS and Android)
+                    onRegister: function(token) {
+                      console.log("TOKEN:", token);
+                    },
+                    // Android only
+                    senderID: "170601632573",
+                    // iOS only
+                    permissions: {
+                      alert: true,
+                      badge: true,
+                      sound: true
+                    },
+                    popInitialNotification: true,
+                    requestPermissions: true
+            
+                  })
+      
+            }
+             
+
     savelogin= async(email, password)=>{
         //saveUserdata(login)
         if(email === ''){
@@ -49,11 +76,11 @@ export default class creatAccountB extends React.Component{
             this.setState({
                 errorLogin:''
             })
-            console.log(res.headers.map.token)
+            const resJ = await res.json()
+            console.log(resJ)
             this.props.navigation.navigate('blindHomePageP',{token:res.headers.map.token})
         }
-        const resJ = await res.json()
-        console.log(resJ)
+       
         
        //console.log(res.body.)
     }

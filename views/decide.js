@@ -1,24 +1,16 @@
 import React from 'react';
 import { View, Text, TouchableOpacity} from 'react-native';
 import styles from './styles'
-
-import PushNotification from "react-native-push-notification";
-//import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import {retrieveData} from './db/Userdb'
 
+import PushNotification from "react-native-push-notification";
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
+
 export default class decide extends React.Component{
-  constructor(props){
-    super(props);
-    this.state={
-        inCall:false,
-        data:''
-    }
-}
-  
     static navigationOptions = {
-          //To hide the ActionBar/NavigationBar
-          //headerShown: false
-      };
+        //To hide the ActionBar/NavigationBar
+        //headerShown: false
+    };
     componentDidMount= async()=>{
       this.setState({inCall:false})
       const data = await retrieveData()
@@ -38,7 +30,7 @@ export default class decide extends React.Component{
                       console.log("NOTIFICATION:")
                       console.log("NOTIFICATION:", notification)
                       if(!this.state.inCall){
-                      //console.log(data)
+                      console.log(data)
                       //if(!this.state.inCall){
                       this.setState({inCall:true})
                       const res = await fetch('https://assistance-system-back-end.herokuapp.com/volunteer/joinRoom', {
@@ -108,12 +100,7 @@ export default class decide extends React.Component{
         //   }else{
 
         //   }
-                
-        
       }
-        //To hide the ActionBar/NavigationBar
-        //headerShown: false
-    
     render(){
         return(
             <View style={styles.container}>

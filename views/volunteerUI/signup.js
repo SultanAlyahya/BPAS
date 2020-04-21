@@ -3,7 +3,10 @@ import { View, Text, StyleSheet, TouchableOpacity, ImageBackground,TextInput} fr
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import loginData from '../db/Userdb'
-import {saveData} from '../db/Userdb'
+import {saveData}  from '../db/Userdb'
+
+import PushNotification from "react-native-push-notification";
+//import PushNotificationIOS from "@react-native-community/push-notification-ios";
 
 export default class sginup extends React.Component{
     constructor(props){
@@ -17,16 +20,35 @@ export default class sginup extends React.Component{
             errorPas:'',
             errorName:'',
             errorCreateAcc:'',
-            errorRePass:''
+            errorRePass:'',
+            notificationToken:''
         }
     }
 
     async componentDidMount() {
-        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-        if (status !== 'granted') {
-            alert('No notification permissions!');
-            return;
-          }
+       
+          
+            console.log('in')
+            PushNotification.configure({
+                
+              // (optional) Called when Token is generated (iOS and Android)
+              onRegister: (token)=> {
+                console.log("TOKEN:", token);
+                this.setState({notificationToken:token.token})
+              },
+              // Android only
+              senderID: "411311542797",
+              // iOS only
+              permissions: {
+                alert: true,
+                badge: true,
+                sound: true
+              },
+              popInitialNotification: true,
+              requestPermissions: true
+      
+            })
+            
     }
 
    craeteUser = async(name,email,password,rePassword)=>{
@@ -65,9 +87,7 @@ export default class sginup extends React.Component{
                 errorPas:'',
                 errorName:'',
             })
-
-        let token = await Notifications.getExpoPushTokenAsync();
-        console.log(token)
+        console.log(this.state.notificationToken)
         const res = await fetch('https://assistance-system-back-end.herokuapp.com/volunteer/Signup', {
             method: 'POST',
             headers: {
@@ -78,14 +98,13 @@ export default class sginup extends React.Component{
                 name:name,
                 email: email,
                 password: password,
-                notificationToken:token
+                notificationToken:this.state.notificationToken
               }),
         })
       
          
         const resJ = await res.json()
         console.log(resJ)
-        console.log(await saveData(res.headers.map.token, Platform.OS))
         
         console.log(resJ.error,`status code: ${res.status}`)
         if(res.status !== 201 && resJ.error ==='the email has been used'){
@@ -96,6 +115,7 @@ export default class sginup extends React.Component{
             this.setState({
                 errorCreateAcc:''
             })
+            saveData(res.headers.map.token,'volunteer')
             this.props.navigation.navigate('loginP')
         }
     }

@@ -17,6 +17,7 @@ import cam from './views/blindUI/cam'
 import textPage from './views/blindUI/TextRecognition'
 import VideoCall from './views/blindUI/VideoCall'
 import call from './views/volunteerUI/call'
+import rating from './views/blindUI/rating'
 
 //import RouterComponent from './views/blindUI/calls/Router'
 //import Video from './views/blindUI/calls/Video'
@@ -137,6 +138,9 @@ const AppNavigator = createStackNavigator({
   },
   callP:{
     screen: call
+  },
+  ratingP:{
+    screen: rating
   },
 });
 

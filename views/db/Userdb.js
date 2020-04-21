@@ -18,13 +18,9 @@ export const retrieveData = async()=>{
 
 export const saveData =async(token, type)=>{
     try {
-        await AsyncStorage.setItem('login', JSON.stringify({token,type}));
-
+        const data = await AsyncStorage.setItem('login', JSON.stringify({token,type}));
       } catch (error) {
         return false
       }
       return true
-    const loginData = await AsyncStorage.getItem('login')
-    const dataToJson = JSON.parse(loginData)
-    return dataToJson
 }

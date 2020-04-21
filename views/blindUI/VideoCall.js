@@ -2,11 +2,10 @@
 /* eslint-disable prettier/prettier */
 
 import React, { Component } from 'react';
-import { View, StyleSheet, NativeModules, ScrollView, Text, Dimensions, TouchableOpacity, Button } from 'react-native';
+import { View, StyleSheet, NativeModules, ScrollView, Text, Dimensions, TouchableOpacity } from 'react-native';
 import { RtcEngine, AgoraView } from 'react-native-agora';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import * as Speech from 'expo-speech';
-//import Modal from 'react-native-modal';
 
 const { Agora } = NativeModules;                  //Define Agora object as a native module
 
@@ -29,8 +28,7 @@ export default class VideoCall extends Component {
       audMute: false,                             //State variable for Audio Mute
       joinSucceed: false,   
       empty:true,                      //State variable for storing success
-      token:this.props.navigation.state.params.token,
-      isModalVisible: false,
+      token:this.props.navigation.state.params.token
     };
     const config = {                            //Setting config of the app
       appid: this.state.appid,                  //App ID
@@ -48,7 +46,7 @@ export default class VideoCall extends Component {
     RtcEngine.init(config);                     //Initialize the RTC engine
   }
   componentDidMount=async()=> {
-    
+    console.log('token',this.state.token)
     
     RtcEngine.on('userJoined', (data) => {
       this.setState({empty:false})
@@ -63,7 +61,6 @@ export default class VideoCall extends Component {
     });
     RtcEngine.on('userOffline', (data) => {       //If user leaves
       this.endCall()
-      this.toggleModal()
       this.setState({
         peerIds: this.state.peerIds.filter(uid => uid !== data.uid), //remove peer ID from state array
       });
@@ -79,7 +76,7 @@ export default class VideoCall extends Component {
     RtcEngine.switchCamera();
     //RtcEngine.destroy()
 
-    await fetch('https://assistance-system-back-end.herokuapp.com/User/notifications', {
+    const res = await fetch('https://assistance-system-back-end.herokuapp.com/User/notifications', {
       method: 'POST',
       headers: {
           Accept: 'application/json',
@@ -90,7 +87,6 @@ export default class VideoCall extends Component {
           room:this.state.channelName
         }),
   })
-
   //const resJ= await res.json()
   console.log('roomB',this.state.channelName)
   }
@@ -124,18 +120,8 @@ export default class VideoCall extends Component {
   */
   endCall() {
     RtcEngine.destroy();
-    this.props.navigation.goBack()
+    this.props.navigation.navigate('ratingP',{token:this.state.token})
   }
-
-  toggleModal = () => {
-    this.setState({isModalVisible: !this.state.isModalVisible});
-  };
-
-  rating = (number) =>{
-    console.log(number)
-    this.endCall()
-  }
-  
   /**
   * @name peerClick
   * @description Function to swap the main peer videostream with a different peer videostream
@@ -157,24 +143,14 @@ export default class VideoCall extends Component {
   videoView() {
     return (
       <View style={{ flex: 1 }}>
-        {/* <Modal isVisible={this.state.isModalVisible}>
-          <View style={{flex: 1}}>
-            <Text>ارجوك قيم المتبرع من ٥ الافضل الى ١ الاسوء</Text>
-            <Button title="١" onPress={()=>this.rating(1)} />
-            <Button title="٢" onPress={()=>this.rating(2)} />
-            <Button title="٣" onPress={()=>this.rating(3)} />
-            <Button title="٤" onPress={()=>this.rating(4)} />
-            <Button title="٥" onPress={()=>this.rating(5)} />
-            <Button title="لا اريد التقييم" onPress={this.rating()} />
-          </View>
-        </Modal>
-         */}
-        {
+        <View style={styles.upView}></View>
+        
+        {/* {
           !this.state.vidMute                                              //view for local video
             ? <AgoraView style={{height:'100%',width:'100%'}} zOrderMediaOverlay={true} showLocalVideo={true} mode={1} />
             : <View />
-        }
-        <View style={styles.buttonBar}>
+        } */}
+        {/* <View style={styles.buttonBar}>
           <Icon.Button style={styles.iconStyle}
             backgroundColor="#0093E9"
             name={this.state.audMute ? 'mic-off' : 'mic'}
@@ -190,7 +166,11 @@ export default class VideoCall extends Component {
             name={this.state.vidMute ? 'videocam-off' : 'videocam'}
             onPress={() => this.toggleVideo()}
           />
-        </View>
+        </View> */}
+        <TouchableOpacity onPress={()=>this.endCall()}
+        style={styles.endCallButton}>
+          <Text style={styles.endText}>اققل المكالمه</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -233,4 +213,22 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     borderRadius: 0,
   },
+  endCallButton:{
+    height:'15%',
+    backgroundColor:'#000000',
+    width:'100%',
+    //borderRadius:5,
+    justifyContent:'center',
+    alignItems:'center',
+   // margin:2
+    
+  },
+  endText:{
+    fontSize:40,
+    color:'#dddddd'
+  },
+  upView:{
+    width:'100%',
+    height:'85%'
+  }
 });
