@@ -17,6 +17,7 @@ export const retrieveData = async()=>{
 }
 
 export const saveData =async(token, type)=>{
+    console.log('savetoken',token)
     try {
         const data = await AsyncStorage.setItem('login', JSON.stringify({token,type}));
       } catch (error) {

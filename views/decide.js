@@ -7,7 +7,15 @@ import PushNotification from "react-native-push-notification";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 
 export default class decide extends React.Component{
-    static navigationOptions = {
+  constructor(props){
+    super(props);
+    this.state={
+      inCall:false,
+      data:''
+    }
+  }
+  
+  static navigationOptions = {
         //To hide the ActionBar/NavigationBar
         //headerShown: false
     };
@@ -30,7 +38,7 @@ export default class decide extends React.Component{
                       console.log("NOTIFICATION:")
                       console.log("NOTIFICATION:", notification)
                       if(!this.state.inCall){
-                      console.log(data)
+                      console.log('data',data)
                       //if(!this.state.inCall){
                       this.setState({inCall:true})
                       const res = await fetch('https://assistance-system-back-end.herokuapp.com/volunteer/joinRoom', {
@@ -45,7 +53,7 @@ export default class decide extends React.Component{
                             }),
                       })
                        const resJ = await res.json()
-                       console.log(resJ)
+                       console.log('call ', resJ)
                       if(resJ.available){
                         this.setState({inCall:true})
                       this.props.navigation.navigate('callP',{

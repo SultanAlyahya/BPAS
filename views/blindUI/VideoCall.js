@@ -142,8 +142,8 @@ export default class VideoCall extends Component {
   */
   videoView() {
     return (
-      <View style={{ flex: 1 }}>
-        <View style={styles.upView}></View>
+      <View style={styles.container}>
+        {/* <View style={styles.upView}></View> */}
         
         {/* {
           !this.state.vidMute                                              //view for local video
@@ -167,10 +167,19 @@ export default class VideoCall extends Component {
             onPress={() => this.toggleVideo()}
           />
         </View> */}
-        <TouchableOpacity onPress={()=>this.endCall()}
+        {/* <TouchableOpacity onPress={()=>this.endCall()}
         style={styles.endCallButton}>
           <Text style={styles.endText}>اققل المكالمه</Text>
+        </TouchableOpacity> */}
+
+
+        <TouchableOpacity style={styles.endCallButton}
+        onPress={()=>this.endCall()}>
+          <Text style={styles.endText}>
+            افقل المكالمه
+          </Text>
         </TouchableOpacity>
+
       </View>
     );
   }
@@ -185,6 +194,31 @@ let dimensions = {                                            //get dimensions o
 };
 
 const styles = StyleSheet.create({
+  container:{
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:'#000000'
+  },
+  endCallButton:{
+    height:300,
+    width:300,
+    borderRadius:360,
+    backgroundColor:'#ffffff',
+    borderWidth:1,
+    borderColor:'#ff0000',
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  endText:{
+    fontSize:40,
+    color:'#000000'
+  },
+
+
+
+
+  //======
   buttonBar: {
     height: 50,
     backgroundColor: '#0093E9',
@@ -213,22 +247,9 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     borderRadius: 0,
   },
-  endCallButton:{
-    height:'15%',
-    backgroundColor:'#000000',
-    width:'100%',
-    //borderRadius:5,
-    justifyContent:'center',
-    alignItems:'center',
-   // margin:2
-    
-  },
-  endText:{
-    fontSize:40,
-    color:'#dddddd'
-  },
   upView:{
     width:'100%',
     height:'85%'
-  }
+  },
+  
 });

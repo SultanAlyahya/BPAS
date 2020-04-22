@@ -1,6 +1,6 @@
 import React from 'react';
 import { View,Text, StyleSheet, TouchableOpacity, ImageBackground, Settings, Image, TextInput} from 'react-native';
-import {saveUserdata, retrieveData} from '../db/Userdb'
+import {saveData, retrieveData} from '../db/Userdb'
 // import {Text} from '@material-ui/core'
 import PushNotification from "react-native-push-notification";
 
@@ -110,7 +110,8 @@ export default class login extends React.Component{
                 errorLogin:''
             })
             const resJ = await res.json()
-        
+            
+            saveData(res.headers.map.token,'volunteer')
             console.log(resJ)
         //console.log(res.headers.map.token)
             this.props.navigation.navigate('volunteerHomePageP', {

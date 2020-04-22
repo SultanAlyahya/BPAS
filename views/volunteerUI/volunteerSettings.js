@@ -27,6 +27,7 @@ export default class volunteerHomePage extends React.Component{
             })
             if(res.status == 200){
             this.setState({call:!this.state.call})
+            this.props.navigation.setParams({call: !this.state.call});
             }
         }
 
@@ -46,6 +47,23 @@ export default class volunteerHomePage extends React.Component{
             }
         }
 
+        //=====================================
+
+        const sendMessage =(type)=>{
+            this.props.navigation.navigate('MessageP',{
+                type:type,
+                token:this.state.token,
+                name:this.state.name
+            })
+        }
+
+        const changePassword=()=>{
+            this.props.navigation.navigate('ChangePasswordP',{
+                token:this.state.token,
+            })
+
+        }
+
         
         return(
             <ScrollView style={styles.Scontainer}>
@@ -61,22 +79,20 @@ export default class volunteerHomePage extends React.Component{
                 </Text>
                 </View>
                 <View style={styles.body}>
-                    <TouchableOpacity style={styles.buttons}>
-                        <Text style={styles.buttonsText}>
-                            account
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttons}>
+                    <TouchableOpacity style={styles.buttons}
+                    onPress={()=>sendMessage('help')}>
                         <Text style={styles.buttonsText}>
                             help
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttons}>
+                    <TouchableOpacity style={styles.buttons}
+                    onPress={()=>changePassword()}>
                         <Text style={styles.buttonsText}>
                             change password
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttons}>
+                    <TouchableOpacity style={styles.buttons}
+                    onPress={()=>sendMessage('feedback')}>
                         <Text style={styles.buttonsText}>
                             feedback to developers
                         </Text>
@@ -116,7 +132,6 @@ const styles = StyleSheet.create({
     textHeader:{
         fontSize:50,
         color:'#333333',
-
     },
     body:{
         height:'70%',
@@ -149,5 +164,5 @@ const styles = StyleSheet.create({
         margin:2,
         borderRadius:10,
         justifyContent:'center' 
-    }
+    },
 })
