@@ -18,7 +18,7 @@ import textPage from './views/blindUI/TextRecognition'
 import VideoCall from './views/blindUI/VideoCall'
 import call from './views/volunteerUI/call'
 import rating from './views/blindUI/rating'
-
+import signupUser from './views/blindUI/signupUser'
 //import RouterComponent from './views/blindUI/calls/Router'
 //import Video from './views/blindUI/calls/Video'
 
@@ -142,6 +142,9 @@ const AppNavigator = createStackNavigator({
   ratingP:{
     screen: rating
   },
+  signupUserP:{
+    screen: signupUser
+  }
 });
 
 export default createAppContainer(AppNavigator);
