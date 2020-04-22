@@ -36,6 +36,24 @@ export default class blindHomePage extends React.Component{
     }
           
     render(){
+
+
+        const logout =async()=>{
+            const res = await fetch('https://assistance-system-back-end.herokuapp.com/User/logout', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'token':this.state.token
+              },
+            })
+
+            if(res.status == 200){
+                this.props.navigation.navigate('decideP')
+            }
+        
+        }
+
         return(
             <View style={styles.containar}>
                 <TouchableOpacity style={styles.buttons}
@@ -47,10 +65,6 @@ export default class blindHomePage extends React.Component{
                     <Text style={styles.text}>اتصل بمتطوع</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.buttons}
-                onPress={()=> this.props.navigation.navigate('CameraP')}>
-                    <Text style={styles.text}>الكشف عن عمله</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttons}
                 onPress={()=> this.props.navigation.navigate('TextP')}>
                     <Text style={styles.text}>قراءة نص</Text>
                 </TouchableOpacity>
@@ -58,6 +72,15 @@ export default class blindHomePage extends React.Component{
                 onPress={()=> this.props.navigation.navigate('CameraP')}>
                     <Text style={styles.text}>الكشف عن مجسم</Text>
                 </TouchableOpacity>
+                <View style={styles.settingsView}>
+                    <TouchableOpacity style={styles.settingsButtons}
+                    onPress={()=>logout()}>
+                        <Text style={styles.text}>تسجيل الخروج</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.settingsButtons}>
+                        <Text style={styles.text}>شرح للبرنامج</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         )
     }
@@ -81,4 +104,23 @@ const styles = StyleSheet.create({
     text:{
         fontSize:30,
     },
+    settingsView:{
+        height:'24%',
+        width:'100%',
+        flexDirection:'row',
+        justifyContent:'space-between'
+    },
+    settingsButtons:{
+        width:'49%',
+        height:'100%',
+        backgroundColor:'#3E91FF',
+        borderRadius:20,
+        justifyContent:'center',
+        alignItems:'center',
+        borderColor:'#000000',
+        borderWidth:1
+    },
+    settingsText:{
+
+    }
 })

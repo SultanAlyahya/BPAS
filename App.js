@@ -20,6 +20,7 @@ import call from './views/volunteerUI/call'
 import rating from './views/blindUI/rating'
 import Message from './views/volunteerUI/sendMessage'
 import ChangePassword from './views/volunteerUI/changePassword'
+import ChangeNmae from './views/volunteerUI/changeName'
 
 import signupUser from './views/blindUI/signupUser'
 //import RouterComponent from './views/blindUI/calls/Router'
@@ -153,6 +154,9 @@ const AppNavigator = createStackNavigator({
   },
   signupUserP:{
     screen: signupUser
+  },
+  ChangeNmaeP:{
+    screen: ChangeNmae
   }
 });
 

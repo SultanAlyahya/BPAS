@@ -57,8 +57,8 @@ export default class volunteerHomePage extends React.Component{
             })
         }
 
-        const changePassword=()=>{
-            this.props.navigation.navigate('ChangePasswordP',{
+        const change=(change)=>{
+            this.props.navigation.navigate(change,{
                 token:this.state.token,
             })
 
@@ -86,9 +86,15 @@ export default class volunteerHomePage extends React.Component{
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttons}
-                    onPress={()=>changePassword()}>
+                    onPress={()=>change('ChangePasswordP')}>
                         <Text style={styles.buttonsText}>
                             change password
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.buttons}
+                    onPress={()=>change('ChangeNmaeP')}>
+                        <Text style={styles.buttonsText}>
+                            change name
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttons}

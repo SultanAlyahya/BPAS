@@ -19,7 +19,7 @@ export class volunteerHomePage extends React.Component{
         this.state={
             token:this.props.navigation.state.params.token || 'true',
             name:this.props.navigation.state.params.name || 'true',
-            rating:this.props.navigation.state.params.rating || 0,
+            rating:(Math.round(this.props.navigation.state.params.rating * 100) / 100).toFixed(1) || 0,
             call: this.props.navigation.state.params.call,
             numberOfBlindPeople: this.props.navigation.state.params.numberOfBlindPeople || 0,
             numberOfCalls: this.props.navigation.state.params.numberOfCalls || 0,
@@ -29,6 +29,7 @@ export class volunteerHomePage extends React.Component{
         }
     }
     async componentDidMount() {
+        
         // try{
         // console.log('in')
         // const res = await fetch('https://assistance-system-back-end.herokuapp.com/volunteer/getCall', {
@@ -82,6 +83,10 @@ export class volunteerHomePage extends React.Component{
                     </TextAsg>
                 )
             })
+        }
+
+        const digits=()=>{
+            
         }
 
         return(
@@ -139,7 +144,7 @@ export class volunteerHomePage extends React.Component{
                     </View>
                     <View style={styles.settingsBox}>
                         <View style={styles.topText}><Text style={styles.text}>Rating</Text></View>
-                        <View style={styles.buttomText}><Text style={styles.text}>5/{this.state.rating}</Text></View>
+                        <View style={styles.buttomText}><Text style={styles.text}>5/{this.state.rating.toString()}</Text></View>
                     </View>
                     <View style={styles.settingsBox}>
                         <View style={styles.topText}><Text style={styles.text}> calls</Text></View>
