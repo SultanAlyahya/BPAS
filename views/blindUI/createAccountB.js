@@ -128,7 +128,7 @@ export default class creatAccountB extends React.Component{
                         <Text style={styles.loginText}>تسجيل دخول</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.loginB}
-                     onPress={()=> this.props.navigation.navigate('blindHomePageP')} 
+                     onPress={()=> this.props.navigation.navigate('signupUserP')} 
                     >
                         <Text style={styles.loginText}>تسجيل حساب جديد</Text>
                         </TouchableOpacity>    

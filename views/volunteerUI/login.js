@@ -166,7 +166,7 @@ export default class login extends React.Component{
                         <Text style={styles.loginText}>login</Text>
                         </TouchableOpacity>
                         <Text style={styles.sginup} onPress={()=> this.props.navigation.navigate('signupP')}>create new account</Text>
-                        <Text style={styles.sginup} onPress={()=> this.retrievelogin()}>foget Password</Text>
+                        {/* <Text style={styles.sginup} onPress={()=> this.retrievelogin()}>foget Password</Text> */}
                     </View>
                 </View>
             </ImageBackground>

@@ -21,6 +21,7 @@ import rating from './views/blindUI/rating'
 import Message from './views/volunteerUI/sendMessage'
 import ChangePassword from './views/volunteerUI/changePassword'
 
+import signupUser from './views/blindUI/signupUser'
 //import RouterComponent from './views/blindUI/calls/Router'
 //import Video from './views/blindUI/calls/Video'
 
@@ -150,6 +151,9 @@ const AppNavigator = createStackNavigator({
   ChangePasswordP:{
     screen: ChangePassword
   },
+  signupUserP:{
+    screen: signupUser
+  }
 });
 
 export default createAppContainer(AppNavigator);
