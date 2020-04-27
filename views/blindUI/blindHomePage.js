@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {isModelReady, getReady} from './ObjectRecognition'
 import requestCameraAndAudioPermission from './permission'
+import * as Speech from 'expo-speech';
 
 export default class blindHomePage extends React.Component{
     constructor(props) {
@@ -20,7 +21,7 @@ export default class blindHomePage extends React.Component{
     async componentDidMount() {
         try{
             if(!isModelReady){
-               //await getReady()
+               await getReady()
             }
             console.log(true)
         }catch(error){
@@ -54,6 +55,13 @@ export default class blindHomePage extends React.Component{
         
         }
 
+        const voice =()=>{
+            Speech.speak('الزر الاول اعلى الصفحة للاتصال بمتطوع فقط قم بالضغط على الزر ليقوم البحث عن متطوع')
+            Speech.speak('الزر اللذي يليه لقراءة النص قم بالضغط عليه ثم قم بتصوير النص وسيتم قراءة اسمه صوتيا')
+            Speech.speak('الزر الثالث اللذي يليه الكشف عن جسم قم بالضط عليه ثم قم بتصوير الجسم ثم ستتم قراءتة صوتيا')
+            Speech.speak(' في اخر الصفحه من الجهة اليسرى زر تسجيل الغروج')
+        }
+
         return(
             <View style={styles.containar}>
                 <TouchableOpacity style={styles.buttons}
@@ -77,7 +85,8 @@ export default class blindHomePage extends React.Component{
                     onPress={()=>logout()}>
                         <Text style={styles.text}>تسجيل الخروج</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.settingsButtons}>
+                    <TouchableOpacity style={styles.settingsButtons}
+                    onPress={()=>voice()}>
                         <Text style={styles.text}>شرح للبرنامج</Text>
                     </TouchableOpacity>
                 </View>

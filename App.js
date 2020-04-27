@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { createAppContainer, } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator} from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import currency from './views/blindUI/currency'
 import decide from './views/decide'
 import blindHomePage from './views/blindUI/blindHomePage'
-import volunteerHomePage from './views/volunteerUI/volunteerHomePage'
+import tabNavigaiton from './views/volunteerUI/volunteerHomePage'
 import login from './views/volunteerUI/login'
 import signup from './views/volunteerUI/signup'
 import createAccountB from './views/blindUI/createAccountB'
@@ -100,15 +100,9 @@ import signupUser from './views/blindUI/signupUser'
 // }
 
 
-const AppNavigator = createStackNavigator({
+const auth = createStackNavigator({
   decideP: {
     screen: decide,
-  },
-  blindHomePageP:{
-    screen: blindHomePage,
-  },
-  volunteerHomePageP:{
-    screen: volunteerHomePage,
   },
   loginP:{
     screen: login,
@@ -116,8 +110,17 @@ const AppNavigator = createStackNavigator({
   signupP:{
     screen: signup,
   },
+  signupUserP:{
+    screen: signupUser
+  },
   createAccountBP:{
     screen: createAccountB,
+  },
+});
+
+const user =createStackNavigator({
+  blindHomePageP:{
+    screen: blindHomePage,
   },
   CurrencyP:{
     screen: currency
@@ -140,11 +143,14 @@ const AppNavigator = createStackNavigator({
   VideoCallP:{
     screen: VideoCall
   },
-  callP:{
-    screen: call
-  },
   ratingP:{
     screen: rating
+  },
+})
+
+const volunteer =createStackNavigator({
+  tabNavigaitonP:{
+    screen: tabNavigaiton,
   },
   MessageP:{
     screen: Message
@@ -152,12 +158,20 @@ const AppNavigator = createStackNavigator({
   ChangePasswordP:{
     screen: ChangePassword
   },
-  signupUserP:{
-    screen: signupUser
+  callP:{
+    screen: call
   },
   ChangeNmaeP:{
     screen: ChangeNmae
-  }
-});
+  },
+})
 
-export default createAppContainer(AppNavigator);
+const switchNav = createSwitchNavigator(
+  {
+    AuthP: auth,
+    VolunteerP: volunteer,
+    UserP: user,
+  })
+
+export default createAppContainer(switchNav);
+

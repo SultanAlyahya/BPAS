@@ -7,9 +7,9 @@ export default class volunteerHomePage extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            token:this.props.navigation.state.params.token || true,
-            name:this.props.navigation.state.params.name || true,
-            call: this.props.navigation.state.params.call
+            token:this.props.navigation.dangerouslyGetParent().getParam("token"),
+            name:this.props.navigation.dangerouslyGetParent().getParam('name'),
+            call: this.props.navigation.dangerouslyGetParent().getParam('call'),
         }
     }
 

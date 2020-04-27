@@ -1,5 +1,5 @@
 import React from 'react';
-import { View,Text, StyleSheet, TouchableOpacity, ImageBackground, Settings, Image, TextInput} from 'react-native';
+import { View,Text, StyleSheet, TouchableOpacity, ImageBackground, Settings, Image, TextInput, ActivityIndicator} from 'react-native';
 import {saveData, retrieveData} from '../db/Userdb'
 // import {Text} from '@material-ui/core'
 import PushNotification from "react-native-push-notification";
@@ -16,7 +16,8 @@ export default class login extends React.Component{
             errorEmail:'',
             errorPass:'',
             errorLogin:'',
-            notificationToken:''
+            notificationToken:'',
+            loginState:false
         };
       }
 
@@ -88,6 +89,7 @@ export default class login extends React.Component{
         //console.log(email, password)
         //let token = await Notifications.getExpoPushTokenAsync();
         try{
+        this.setState({loginState:true})
         const res = await fetch('https://assistance-system-back-end.herokuapp.com/volunteer/Login', {
             method: 'POST',
             headers: {
@@ -110,21 +112,24 @@ export default class login extends React.Component{
                 errorLogin:''
             })
             const resJ = await res.json()
-            
+            this.setState({loginState:false})
             saveData(res.headers.map.token,'volunteer')
-            console.log(resJ)
+            console.log('token',res.headers.map.token)
         //console.log(res.headers.map.token)
-            this.props.navigation.navigate('volunteerHomePageP', {
-                token: res.headers.map.token,
-                name: resJ.name,
-                call: resJ.call,
-                rating: resJ.rating,
-                numberOfBlindPeople: resJ.numberOfBlindPeople,
-                numberOfCalls: resJ.numberOfCalls,
-                numberOfActiveVolunteers: resJ.numberOfActiveVolunteers,
-                numberOfVolunteers: resJ.numberOfVolunteers
+            this.props.navigation.navigate('tabNavigaitonP',{
+                
+                
+                    token: res.headers.map.token,
+                    name: resJ.name,
+                    call: resJ.call,
+                    rating: resJ.rating,
+                    numberOfBlindPeople: resJ.numberOfBlindPeople,
+                    numberOfCalls: resJ.numberOfCalls,
+                    numberOfActiveVolunteers: resJ.numberOfActiveVolunteers,
+                    numberOfVolunteers: resJ.numberOfVolunteers
+                
             })
-        }
+            }
     }catch(error){
         console.log(error)
     }
@@ -158,13 +163,15 @@ export default class login extends React.Component{
                     ></TextInput>
                     <Text style={styles.errorMessage}>{this.state.errorPass}</Text>
                     <View style={styles.loginV}>
-                    <TouchableOpacity style={styles.loginB}
-                     onPress={()=> this.savelogin(this.state.email, this.state.Password)}
-                        //this.props.navigation.navigate('volunteerHomePageP')
-                       
-                    >
+                    {
+                        !this.state.loginState? <TouchableOpacity style={styles.loginB}
+                     onPress={()=> this.savelogin(this.state.email, this.state.Password)}>
                         <Text style={styles.loginText}>login</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity>:
+                        <View style={styles.render}>
+                            <ActivityIndicator size="large" color="#000000" />
+                        </View>
+                        }
                         <Text style={styles.sginup} onPress={()=> this.props.navigation.navigate('signupP')}>create new account</Text>
                         {/* <Text style={styles.sginup} onPress={()=> this.retrievelogin()}>foget Password</Text> */}
                     </View>
@@ -195,6 +202,17 @@ const styles = StyleSheet.create({
         height:'50%',
         width:'100%',
         backgroundColor:'#53A4FF',
+        alignItems:'center',
+        justifyContent:'center',
+        // borderColor:'#000000',
+        // borderWidth:1,
+        borderRadius:10,
+        marginBottom:'2%',
+    },
+    render:{
+        height:'50%',
+        width:'100%',
+        //backgroundColor:'#53A4FF',
         alignItems:'center',
         justifyContent:'center',
         // borderColor:'#000000',

@@ -51,7 +51,7 @@ export default class VideoCall extends Component {
     RtcEngine.on('userJoined', (data) => {
       this.setState({empty:false})
       console.log("empty", this.state.empty)
-      Speech.speak('someone enters the call')
+      Speech.speak('شخص دخل المكالمة')
       const { peerIds } = this.state;             //Get currrent peer IDs
       if (peerIds.indexOf(data.uid) === -1) {     //If new user has joined
         this.setState({
@@ -176,7 +176,7 @@ export default class VideoCall extends Component {
         <TouchableOpacity style={styles.endCallButton}
         onPress={()=>this.endCall()}>
           <Text style={styles.endText}>
-            افقل المكالمه
+            اقفل المكالمه
           </Text>
         </TouchableOpacity>
 

@@ -13,18 +13,18 @@ import { Text as TextAsg} from 'react-native-svg'
 import Svg, {Rect} from 'react-native-svg';
 
 
-export class volunteerHomePage extends React.Component{
+class volunteerHomePage extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            token:this.props.navigation.state.params.token || 'true',
-            name:this.props.navigation.state.params.name || 'true',
-            rating:(Math.round(this.props.navigation.state.params.rating * 100) / 100).toFixed(1) || 0,
-            call: this.props.navigation.state.params.call,
-            numberOfBlindPeople: this.props.navigation.state.params.numberOfBlindPeople || 0,
-            numberOfCalls: this.props.navigation.state.params.numberOfCalls || 0,
-            numberOfActiveVolunteers: this.props.navigation.state.params.numberOfActiveVolunteers || 0,
-            numberOfVolunteers: this.props.navigation.state.params.numberOfVolunteers || 0
+            token:this.props.navigation.dangerouslyGetParent().getParam("token"),
+            name:this.props.navigation.dangerouslyGetParent().getParam('name'),
+            rating:(Math.round(this.props.navigation.dangerouslyGetParent().getParam('rating') * 100) / 100).toFixed(1) || 0,
+            call: this.props.navigation.dangerouslyGetParent().getParam('call'),
+            numberOfBlindPeople: this.props.navigation.dangerouslyGetParent().getParam('numberOfBlindPeople') || 0,
+            numberOfCalls: this.props.navigation.dangerouslyGetParent().getParam('numberOfCalls') || 0,
+            numberOfActiveVolunteers: this.props.navigation.dangerouslyGetParent().getParam('numberOfActiveVolunteers') || 0,
+            numberOfVolunteers: this.props.navigation.dangerouslyGetParent().getParam('numberOfVolunteers') || 0
 
         }
     }
@@ -193,7 +193,7 @@ const TabNavigator = createBottomTabNavigator({
     }
   );
   
-  export default createAppContainer(TabNavigator);
+  export default TabNavigator;
 
 
 

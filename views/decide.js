@@ -21,8 +21,12 @@ export default class decide extends React.Component{
     };
     componentDidMount= async()=>{
       this.setState({inCall:false})
-      const data = await retrieveData()
-      this.setState({data:data})
+      try{
+        const data = await retrieveData()
+        this.setState({data:data})
+      }catch(error){
+        console.log(error)
+      }
 
      
         PushNotification.configure({
@@ -108,6 +112,8 @@ export default class decide extends React.Component{
         //   }else{
 
         //   }
+
+        
       }
     render(){
         return(

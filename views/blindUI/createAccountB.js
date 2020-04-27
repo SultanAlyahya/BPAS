@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Settings, Image, TextInput} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Settings, Image, TextInput, ActivityIndicator} from 'react-native';
 import {saveUserdata, retrieveData} from '../db/Userdb'
 
 import PushNotification from "react-native-push-notification";
@@ -14,7 +14,8 @@ export default class creatAccountB extends React.Component{
             data:'',
             errorEmail: '',
             errorPass:'',
-            errorLogin:''
+            errorLogin:'',
+            loginState:false
         };
       }
 
@@ -78,6 +79,7 @@ export default class creatAccountB extends React.Component{
             })
             const resJ = await res.json()
             console.log(resJ)
+            await saveUserdata(res.headers.map.token, 'user')
             this.props.navigation.navigate('blindHomePageP',{token:res.headers.map.token})
         }
        
@@ -120,16 +122,21 @@ export default class creatAccountB extends React.Component{
                     ></TextInput>
                     <Text style={styles.errorMessage}>{this.state.errorPass}</Text>
                     <View style={styles.loginV}>
-                    <TouchableOpacity style={styles.loginB}
-                     onPress={()=>{ //this.savelogin(this.state.email, this.state.password)
-                        this.savelogin(this.state.email,this.state.password)
-                     }} 
-                    >
-                        <Text style={styles.loginText}>تسجيل دخول</Text>
-                        </TouchableOpacity>
+                    {
+                        !this.state.loginState?
                         <TouchableOpacity style={styles.loginB}
-                     onPress={()=> this.props.navigation.navigate('signupUserP')} 
-                    >
+                        onPress={()=>{ //this.savelogin(this.state.email, this.state.password)
+                            this.savelogin(this.state.email,this.state.password)
+                        }}> 
+                        
+                            <Text style={styles.loginText}>تسجيل دخول</Text>
+                        </TouchableOpacity> :
+                        <View style={styles.render}>
+                            <ActivityIndicator size="large" color="#000000" />
+                        </View>
+                    }      
+                        <TouchableOpacity style={styles.loginB}
+                        onPress={()=> this.props.navigation.navigate('signupUserP')} >
                         <Text style={styles.loginText}>تسجيل حساب جديد</Text>
                         </TouchableOpacity>    
                     </View>
@@ -159,6 +166,17 @@ const styles = StyleSheet.create({
         height:'50%',
         width:'100%',
         backgroundColor:'#53A4FF',
+        alignItems:'center',
+        justifyContent:'center',
+        // borderColor:'#000000',
+        // borderWidth:1,
+        borderRadius:10,
+        marginBottom:'2%',
+    },
+    render:{
+        height:'50%',
+        width:'100%',
+        //backgroundColor:'#53A4FF',
         alignItems:'center',
         justifyContent:'center',
         // borderColor:'#000000',
