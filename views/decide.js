@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity} from 'react-native';
 import styles from './styles'
 import {retrieveData} from './db/Userdb'
+import SplashScreen from 'react-native-splash-screen'
 
 import PushNotification from "react-native-push-notification";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
@@ -20,14 +21,10 @@ export default class decide extends React.Component{
         //headerShown: false
     };
     componentDidMount= async()=>{
+      //SplashScreen.show()
       this.setState({inCall:false})
       try{
         const data = await retrieveData()
-        this.setState({data:data})
-      }catch(error){
-        console.log(error)
-      }
-
      
         PushNotification.configure({
 
@@ -50,7 +47,7 @@ export default class decide extends React.Component{
                           headers: {
                               "Accept": 'application/json',
                               'Content-Type': 'application/json',
-                              'token':this.state.data.token
+                              'token':data.token
                             },
                             body: JSON.stringify({
                               room:notification.room
@@ -94,27 +91,49 @@ export default class decide extends React.Component{
                     requestPermissions: true
             
                   })
-                  
-        
-        //var data
-        //   try{
-        //     const data= await retrieveData()
-        //     console.log(data)
-        //   }catch(error){
-        //     console.log(error)
-            
-        //   }
-        //   if(!data){
-        //     return 
-        //   }
-        //   if(data.type == "blind"){
 
-        //   }else{
 
-        //   }
+                  if(data){
+                    console.log(data)
+                    if(data.type="volunteer"){
+                      await this.navigateToVolunteer(data.token)
+                    }else{
+                      SplashScreen.hide()
+                    }
+                  }else{
+                    SplashScreen.hide()
+                  }
 
-        
+                }catch(error){
+                  console.log(error)
+                }
       }
+
+
+      navigateToVolunteer=async(token)=>{
+        const res = await fetch('https://assistance-system-back-end.herokuapp.com/volunteer/loginByToken', {
+            method: 'GET',
+            headers: {
+                "Accept": 'application/json',
+                'Content-Type': 'application/json',
+                token:token
+              }
+            })
+            const resJ = await res.json()
+            //SplashScreen.hide()
+            this.props.navigation.navigate('tabNavigaitonP',{ 
+              token: token,
+              name: resJ.name,
+              call: resJ.call,
+              rating: resJ.rating,
+              numberOfBlindPeople: resJ.numberOfBlindPeople,
+              numberOfCalls: resJ.numberOfCalls,
+              numberOfActiveVolunteers: resJ.numberOfActiveVolunteers,
+              numberOfVolunteers: resJ.numberOfVolunteers
+          
+      })
+      }
+
     render(){
         return(
             <View style={styles.container}>

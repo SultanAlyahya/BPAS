@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import settings from './volunteerSettings'
 //import { Ionicons } from '@expo/vector-icons';
+import SplashScreen from 'react-native-splash-screen'
 
 import { PieChart } from 'react-native-svg-charts'
 import { Text as TextAsg} from 'react-native-svg'
@@ -29,7 +30,7 @@ class volunteerHomePage extends React.Component{
         }
     }
     async componentDidMount() {
-        
+        SplashScreen.hide()
         // try{
         // console.log('in')
         // const res = await fetch('https://assistance-system-back-end.herokuapp.com/volunteer/getCall', {
