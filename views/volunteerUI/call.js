@@ -121,17 +121,34 @@ export default class call extends Component {
   videoView() {
     return (
       <View style={{ flex: 1 }}>
-        
-        <View style={{ height: dimensions.height - 50 }}>
+        {
+          this.state.peerIds.length > 1
+            ? <View style={{ flex: 1 }}>
+              <View style={{ height: dimensions.height * 3 / 4 - 50 }}>
+                <AgoraView style={{ flex: 1 }}
+                  remoteUid={this.state.peerIds[0]} mode={1} key={this.state.peerIds[0]} />
+              </View>
+              <View style={{ height: dimensions.height / 4 }}>
+                <ScrollView horizontal={true} decelerationRate={0}
+                  snapToInterval={dimensions.width / 2} snapToAlignment={'center'} style={{ width: dimensions.width, height: dimensions.height / 4 }}>
+                  {
+                    this.state.peerIds.slice(1).map((data) => (
+                      <TouchableOpacity style={{ width: dimensions.width / 2, height: dimensions.height / 4 }}
+                        onPress={() => this.peerClick(data)} key={data}>
+                        <AgoraView style={{ width: dimensions.width / 2, height: dimensions.height / 4 }}
+                          remoteUid={data} mode={1} key={data} />
+                      </TouchableOpacity>
+                    ))
+                  }
+                </ScrollView>
+              </View>
+            </View>
+            : this.state.peerIds.length > 0
+              ? <View style={{ height: dimensions.height - 50 }}>
                 <AgoraView style={{ flex: 1 }}
                   remoteUid={this.state.peerIds[0]} mode={1} />
               </View>
-             
-        
-        {
-          !this.state.vidMute                                              //view for local video
-            ? <AgoraView style={styles.localVideoStyle} zOrderMediaOverlay={true} showLocalVideo={true} mode={1} />
-            : <View />
+              : <Text>No users connected</Text>
         }
         {/* <View style={styles.buttonBar}>
           <Icon.Button style={styles.iconStyle}

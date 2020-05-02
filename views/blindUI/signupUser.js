@@ -97,7 +97,6 @@ export default class sginup extends React.Component{
                 name:name,
                 email: email,
                 password: password,
-                notificationToken:this.state.notificationToken
               }),
         })
       

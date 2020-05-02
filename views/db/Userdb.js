@@ -25,3 +25,13 @@ export const saveData =async(token, type)=>{
       }
       return true
 }
+
+export const logout=async()=>{
+    try{
+        await AsyncStorage.removeItem('login')
+        return true
+    }catch(error){
+        console.log(error)
+        return false
+    }
+}

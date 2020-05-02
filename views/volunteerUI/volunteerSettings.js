@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView} from 'react-native';
 import SettingsLine from '../components/settingsLine'
 import Header from '../components/header'
+import {logout} from '../db/Userdb'
 
 export default class volunteerHomePage extends React.Component{
     constructor(props){
@@ -13,27 +14,27 @@ export default class volunteerHomePage extends React.Component{
         }
     }
 
-    render(){
+    toggleCalls =async()=>{
 
-        const toggleCalls =async()=>{
-
-            const res = await fetch('https://assistance-system-back-end.herokuapp.com/volunteer/toggleCalls', {
-            method: 'PATCH',
-            headers: {
-                "Accept": 'application/json',
-                'Content-Type': 'application/json',
-                token:this.state.token
-              }
-            })
-            if(res.status == 200){
-            this.setState({call:!this.state.call})
-            this.props.navigation.setParams({call: !this.state.call});
-            }
+        const res = await fetch('https://assistance-system-back-end.herokuapp.com/volunteer/toggleCalls', {
+        method: 'PATCH',
+        headers: {
+            "Accept": 'application/json',
+            'Content-Type': 'application/json',
+            token:this.state.token
+          }
+        })
+        if(res.status == 200){
+        this.setState({call:!this.state.call})
+        this.props.navigation.setParams({call: !this.state.call});
         }
+    }
 
-        //=======================================
+    //=======================================
 
-        const logout =async()=>{
+    logout =async()=>{
+        const isLogout = await logout()
+        if(isLogout){
             const res = await fetch('https://assistance-system-back-end.herokuapp.com/volunteer/logout', {
                 method: 'GET',
                 headers: {
@@ -46,23 +47,28 @@ export default class volunteerHomePage extends React.Component{
                 this.props.navigation.navigate('decideP')
             }
         }
+    }
 
-        //=====================================
+    //=====================================
 
-        const sendMessage =(type)=>{
-            this.props.navigation.navigate('MessageP',{
-                type:type,
-                token:this.state.token,
-                name:this.state.name
-            })
-        }
+    sendMessage =(type)=>{
+        this.props.navigation.navigate('MessageP',{
+            type:type,
+            token:this.state.token,
+            name:this.state.name
+        })
+    }
 
-        const change=(change)=>{
-            this.props.navigation.navigate(change,{
-                token:this.state.token,
-            })
+    change=(change)=>{
+        this.props.navigation.navigate(change,{
+            token:this.state.token,
+        })
 
-        }
+    }
+
+    render(){
+
+        
 
         
         return(
@@ -80,37 +86,37 @@ export default class volunteerHomePage extends React.Component{
                 </View>
                 <View style={styles.body}>
                     <TouchableOpacity style={styles.buttons}
-                    onPress={()=>sendMessage('help')}>
+                    onPress={()=>this.sendMessage('help')}>
                         <Text style={styles.buttonsText}>
                             help
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttons}
-                    onPress={()=>change('ChangePasswordP')}>
+                    onPress={()=>this.change('ChangePasswordP')}>
                         <Text style={styles.buttonsText}>
                             change password
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttons}
-                    onPress={()=>change('ChangeNmaeP')}>
+                    onPress={()=>this.change('ChangeNmaeP')}>
                         <Text style={styles.buttonsText}>
                             change name
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttons}
-                    onPress={()=>sendMessage('feedback')}>
+                    onPress={()=>this.sendMessage('feedback')}>
                         <Text style={styles.buttonsText}>
                             feedback to developers
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={this.state.call?styles.enableButton:styles.disableButton}
-                    onPress={()=>toggleCalls()}>
+                    onPress={()=>this.toggleCalls()}>
                         <Text style={styles.buttonsText}>
                             {this.state.call? 'Click to disable calls':'Click to anable calls'}
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttons}
-                    onPress={()=>logout()}>
+                    onPress={()=>this.logout()}>
                         <Text style={styles.buttonsText}>
                             logout
                         </Text>

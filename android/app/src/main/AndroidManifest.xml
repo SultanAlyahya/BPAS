@@ -39,7 +39,7 @@
                     android:resource="@android:color/white"/>
  
         <!-- < Only if you're using GCM or localNotificationSchedule() > -->
-        <receiver
+        <!-- <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
@@ -47,7 +47,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <category android:name="${applicationId}" />
             </intent-filter>
-        </receiver>
+        </receiver> -->
         <!-- < Only if you're using GCM or localNotificationSchedule() > -->
  
         <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
