@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {isModelReady, getReady} from './ObjectRecognition'
 import requestCameraAndAudioPermission from './permission'
 import * as Speech from 'expo-speech';
+import SplashScreen from 'react-native-splash-screen'
+import {logout} from '../db/Userdb'
 
 export default class blindHomePage extends React.Component{
     constructor(props) {
@@ -20,6 +22,7 @@ export default class blindHomePage extends React.Component{
       }
     async componentDidMount() {
         try{
+            SplashScreen.hide()
             if(!isModelReady){
                await getReady()
             }
@@ -35,33 +38,37 @@ export default class blindHomePage extends React.Component{
         console.log('the room',this.state.room)
         console.log('the token', this.state.token)
     }
-          
-    render(){
 
-
-        const logout =async()=>{
+    logout =async()=>{
+        this.setState({render:true})
+        const isLogout = await logout()
+        console.log(isLogout)
+        if(isLogout){
             const res = await fetch('https://assistance-system-back-end.herokuapp.com/User/logout', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 'token':this.state.token
-              },
+            },
             })
-
             if(res.status == 200){
+                this.setState({render:false})
                 this.props.navigation.navigate('decideP')
             }
-        
         }
+        this.setState({render:false})
+    }
 
-        const voice =()=>{
-            Speech.speak('الزر الاول اعلى الصفحة للاتصال بمتطوع فقط قم بالضغط على الزر ليقوم البحث عن متطوع')
-            Speech.speak('الزر اللذي يليه لقراءة النص قم بالضغط عليه ثم قم بتصوير النص وسيتم قراءة اسمه صوتيا')
-            Speech.speak('الزر الثالث اللذي يليه الكشف عن جسم قم بالضط عليه ثم قم بتصوير الجسم ثم ستتم قراءتة صوتيا')
-            Speech.speak(' في اخر الصفحه من الجهة اليسرى زر تسجيل الغروج')
-        }
+    voice =()=>{
+        Speech.speak('الزر الاول اعلى الصفحة للاتصال بمتطوع فقط قم بالضغط على الزر ليقوم البحث عن متطوع')
+        Speech.speak('الزر اللذي يليه لقراءة النص قم بالضغط عليه ثم قم بتصوير النص وسيتم قراءة اسمه صوتيا')
+        Speech.speak('الزر الثالث اللذي يليه الكشف عن جسم قم بالضط عليه ثم قم بتصوير الجسم ثم ستتم قراءتة صوتيا')
+        Speech.speak(' في اخر الصفحه من الجهة اليسرى زر تسجيل الغروج')
+    }
 
+          
+    render(){
         return(
             <View style={styles.containar}>
                 <TouchableOpacity style={styles.buttons}
@@ -81,12 +88,19 @@ export default class blindHomePage extends React.Component{
                     <Text style={styles.text}>الكشف عن مجسم</Text>
                 </TouchableOpacity>
                 <View style={styles.settingsView}>
+                {
+                    !this.state.render?
                     <TouchableOpacity style={styles.settingsButtons}
-                    onPress={()=>logout()}>
+                    onPress={()=>this.logout()}>
                         <Text style={styles.text}>تسجيل الخروج</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity>:
+
+                    <View style={styles.render}>
+                         <ActivityIndicator size="large" color="#000000" />
+                    </View>
+                }
                     <TouchableOpacity style={styles.settingsButtons}
-                    onPress={()=>voice()}>
+                    onPress={()=>this.voice()}>
                         <Text style={styles.text}>شرح للبرنامج</Text>
                     </TouchableOpacity>
                 </View>
@@ -131,5 +145,15 @@ const styles = StyleSheet.create({
     },
     settingsText:{
 
+    },
+    render:{
+        width:'49%',
+        height:'100%',
+        backgroundColor:'#3E91FF',
+        borderRadius:20,
+        justifyContent:'center',
+        alignItems:'center',
+        borderColor:'#000000',
+        borderWidth:1
     }
 })

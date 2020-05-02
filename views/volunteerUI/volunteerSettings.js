@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView} from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
 import SettingsLine from '../components/settingsLine'
 import Header from '../components/header'
 import {logout} from '../db/Userdb'
@@ -11,6 +11,7 @@ export default class volunteerHomePage extends React.Component{
             token:this.props.navigation.dangerouslyGetParent().getParam("token"),
             name:this.props.navigation.dangerouslyGetParent().getParam('name'),
             call: this.props.navigation.dangerouslyGetParent().getParam('call'),
+            render:false,
         }
     }
 
@@ -33,6 +34,7 @@ export default class volunteerHomePage extends React.Component{
     //=======================================
 
     logout =async()=>{
+        this.setState({render:true})
         const isLogout = await logout()
         if(isLogout){
             const res = await fetch('https://assistance-system-back-end.herokuapp.com/volunteer/logout', {
@@ -44,9 +46,11 @@ export default class volunteerHomePage extends React.Component{
                 }
             })
             if(res.status == 200){
+                this.setState({render:false})
                 this.props.navigation.navigate('decideP')
             }
         }
+        this.setState({render:false})
     }
 
     //=====================================
@@ -117,9 +121,16 @@ export default class volunteerHomePage extends React.Component{
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttons}
                     onPress={()=>this.logout()}>
-                        <Text style={styles.buttonsText}>
-                            logout
-                        </Text>
+                        {
+                            !this.state.render?
+                            <Text style={styles.buttonsText}>
+                                logout
+                            </Text>:
+
+                            <View style={styles.render}>
+                                <ActivityIndicator size="large" color="#000000" />
+                            </View>
+                        }
                     </TouchableOpacity>
                 </View>
   
@@ -157,6 +168,14 @@ const styles = StyleSheet.create({
         backgroundColor:'#ffffff',
         justifyContent:'center'
         
+    },
+    render:{
+        height:100,
+        //width:'96%',
+        margin:2,
+        borderRadius:10,
+        backgroundColor:'#ffffff',
+        justifyContent:'center'
     },
     buttonsText:{
         fontSize:35,

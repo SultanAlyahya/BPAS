@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Settings, Image, TextInput, ActivityIndicator} from 'react-native';
-import {saveUserdata, retrieveData} from '../db/Userdb'
+import {saveData, retrieveData} from '../db/Userdb'
 
 import PushNotification from "react-native-push-notification";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
@@ -15,7 +15,7 @@ export default class creatAccountB extends React.Component{
             errorEmail: '',
             errorPass:'',
             errorLogin:'',
-            loginState:false
+            render:false
         };
       }
 
@@ -44,7 +44,7 @@ export default class creatAccountB extends React.Component{
              
 
     savelogin= async(email, password)=>{
-        //saveUserdata(login)
+        this.setState({render:true})
         if(email === ''){
             this.setState({
                 errorEmail:'الرجاء ادخال البريد الالكتروني'
@@ -77,14 +77,15 @@ export default class creatAccountB extends React.Component{
             this.setState({
                 errorLogin:''
             })
-            const resJ = await res.json()
-            console.log(resJ)
-            await saveUserdata(res.headers.map.token, 'user')
+            //const resJ = await res.json()
+            //console.log(resJ)
+            await saveData(res.headers.map.token, 'user')
+            this.setState({render:false})
             this.props.navigation.navigate('blindHomePageP',{token:res.headers.map.token})
         }
        
         
-       //console.log(res.body.)
+        this.setState({render:false})
     }
     retrievelogin=async()=>{
         const data = await retrieveData()
@@ -123,7 +124,7 @@ export default class creatAccountB extends React.Component{
                     <Text style={styles.errorMessage}>{this.state.errorPass}</Text>
                     <View style={styles.loginV}>
                     {
-                        !this.state.loginState?
+                        !this.state.render?
                         <TouchableOpacity style={styles.loginB}
                         onPress={()=>{ //this.savelogin(this.state.email, this.state.password)
                             this.savelogin(this.state.email,this.state.password)

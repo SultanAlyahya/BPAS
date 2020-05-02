@@ -22,15 +22,16 @@ export default class decide extends React.Component{
       this.setState({inCall:false})
       try{
         const data = await retrieveData()
-
+        console.log('data',data)
         await this.notification()
 
         if(data){
-          console.log(data)
-          if(data.type="volunteer"){
+          console.log('data')
+          if(data.type=="volunteer"){
             await this.navigateToVolunteer(data.token)
           }else{
-            SplashScreen.hide()
+            console.log('user')
+            await this.navigateToUser(data.token)
           }
         }else{
           SplashScreen.hide()
@@ -65,6 +66,28 @@ export default class decide extends React.Component{
           numberOfVolunteers: resJ.numberOfVolunteers
             
         })
+      }catch(error){
+          SplashScreen.hide()
+      }
+    }
+
+    navigateToUser=async(token)=>{
+      try{
+        const res = await fetch('https://assistance-system-back-end.herokuapp.com/User/loginByToken', {
+            method: 'GET',
+            headers: {
+                "Accept": 'application/json',
+                'Content-Type': 'application/json',
+                token:token
+              }
+        })
+          if(res.status == 200){
+          this.props.navigation.navigate('blindHomePageP',{ 
+            token: token,
+          })
+        }else{
+          SplashScreen.hide()
+        }
       }catch(error){
           SplashScreen.hide()
       }

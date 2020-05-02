@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground,TextInput} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground,TextInput, ActivityIndicator} from 'react-native';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import loginData from '../db/Userdb'
@@ -20,7 +20,8 @@ export default class sginup extends React.Component{
             errorName:'',
             errorCreateAcc:'',
             errorRePass:'',
-            notificationToken:''
+            notificationToken:'',
+            render:false
         }
     }
 
@@ -50,7 +51,8 @@ export default class sginup extends React.Component{
             
     }
 
-   craeteUser = async(name,email,password,rePassword)=>{
+    craeteUser = async(name,email,password,rePassword)=>{
+       this.setState({render:true})
         console.log(name,email, password)
         if(name ===''|| email ==='' ||password ===''||rePassword ===''){
             if(name === ''){
@@ -86,39 +88,41 @@ export default class sginup extends React.Component{
                 errorPas:'',
                 errorName:'',
             })
-        //console.log(token)
-        const res = await fetch('https://assistance-system-back-end.herokuapp.com/User/Signup', {
-            method: 'POST',
-            headers: {
-                "Accept": 'application/json',
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                name:name,
-                email: email,
-                password: password,
-              }),
-        })
-      
-         
-        const resJ = await res.json()
-        console.log(resJ)
+            //console.log(token)
+            const res = await fetch('https://assistance-system-back-end.herokuapp.com/User/Signup', {
+                method: 'POST',
+                headers: {
+                    "Accept": 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name:name,
+                    email: email,
+                    password: password,
+                }),
+            })
         
-        console.log(resJ.error,`status code: ${res.status}`)
-        if(res.status !== 201 && resJ.error ==='the email has been used'){
-            this.setState({
-                errorCreateAcc:'البريد الإلكتروني مستخدم'
-            })
-        }else{
-            this.setState({
-                errorCreateAcc:''
-            })
-            saveData(res.headers.map.token,'user')
-            this.props.navigation.navigate('createAccountBP')
-            console.log("im here after navigate ")
+            
+            const resJ = await res.json()
+            console.log(resJ)
+            
+            console.log(resJ.error,`status code: ${res.status}`)
+            if(res.status !== 201 && resJ.error ==='the email has been used'){
+                this.setState({
+                    errorCreateAcc:'البريد الإلكتروني مستخدم'
+                })
+            }else{
+                this.setState({
+                    errorCreateAcc:''
+                })
+                await saveData(res.headers.map.token,'user')
+                this.setState({render:false})
+                this.props.navigation.navigate('createAccountBP')
+                console.log("im here after navigate ")
+            }
         }
+        this.setState({render:false})
     }
-        }
 
 
     render(){
@@ -152,10 +156,17 @@ export default class sginup extends React.Component{
                     <Text style={styles.errorMessage}>{this.state.errorRePass}</Text>
                     
                     <View style={styles.loginV}>
-                    <TouchableOpacity style={styles.loginB}
-                    onPress={()=>this.craeteUser(this.state.name, this.state.email,this.state.password,this.state.rePassword)}>
-                        <Text style={styles.loginText}>انشاء حساب جديد</Text>
-                        </TouchableOpacity>
+                    {
+                       !this.state.render?
+                       <TouchableOpacity style={styles.loginB}
+                        onPress={()=>this.craeteUser(this.state.name, this.state.email,this.state.password,this.state.rePassword)}>
+                            <Text style={styles.loginText}>انشاء حساب جديد</Text>
+                        </TouchableOpacity>:
+
+                        <View style={styles.render}>
+                            <ActivityIndicator size="large" color="#000000" />
+                        </View>
+                    }
                     </View>
                 </View>
             </ImageBackground>
@@ -184,6 +195,17 @@ const styles = StyleSheet.create({
         height:'50%',
         width:'100%',
         backgroundColor:'#53A4FF',
+        alignItems:'center',
+        justifyContent:'center',
+        // borderColor:'#000000',
+        // borderWidth:1,
+        borderRadius:10,
+        marginBottom:'2%',
+    },
+    render:{
+        height:'50%',
+        width:'100%',
+        //backgroundColor:'#53A4FF',
         alignItems:'center',
         justifyContent:'center',
         // borderColor:'#000000',

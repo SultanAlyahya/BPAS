@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground,TextInput} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground,TextInput, ActivityIndicator} from 'react-native';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import loginData from '../db/Userdb'
@@ -21,7 +21,8 @@ export default class sginup extends React.Component{
             errorName:'',
             errorCreateAcc:'',
             errorRePass:'',
-            notificationToken:''
+            notificationToken:'',
+            render:false,
         }
     }
 
@@ -51,7 +52,8 @@ export default class sginup extends React.Component{
             
     }
 
-   craeteUser = async(name,email,password,rePassword)=>{
+    craeteUser = async(name,email,password,rePassword)=>{
+       this.setState({render:true})
         console.log(name,email, password)
         if(name ===''|| email ==='' ||password ===''||rePassword ===''){
             if(name === ''){
@@ -115,11 +117,13 @@ export default class sginup extends React.Component{
             this.setState({
                 errorCreateAcc:''
             })
-            saveData(res.headers.map.token,'volunteer')
+            await saveData(res.headers.map.token,'volunteer')
+            this.setState({render:false})
             this.props.navigation.navigate('loginP')
         }
-    }
         }
+        this.setState({render:false})
+    }
 
 
     render(){
@@ -153,10 +157,17 @@ export default class sginup extends React.Component{
                     <Text style={styles.errorMessage}>{this.state.errorRePass}</Text>
                     
                     <View style={styles.loginV}>
-                    <TouchableOpacity style={styles.loginB}
-                    onPress={()=>this.craeteUser(this.state.name, this.state.email,this.state.password,this.state.rePassword)}>
-                        <Text style={styles.loginText}>انشاء حساب جديد</Text>
-                        </TouchableOpacity>
+                    {   
+                        !this.state.render?
+                        <TouchableOpacity style={styles.loginB}
+                        onPress={()=>this.craeteUser(this.state.name, this.state.email,this.state.password,this.state.rePassword)}>
+                            <Text style={styles.loginText}>انشاء حساب جديد</Text>
+                        </TouchableOpacity>:
+
+                        <View style={styles.render}>
+                            <ActivityIndicator size="large" color="#000000" />
+                        </View>
+                    }
                     </View>
                 </View>
             </ImageBackground>
@@ -185,6 +196,17 @@ const styles = StyleSheet.create({
         height:'50%',
         width:'100%',
         backgroundColor:'#53A4FF',
+        alignItems:'center',
+        justifyContent:'center',
+        // borderColor:'#000000',
+        // borderWidth:1,
+        borderRadius:10,
+        marginBottom:'2%',
+    },
+    render:{
+        height:'50%',
+        width:'100%',
+        //backgroundColor:'#53A4FF',
         alignItems:'center',
         justifyContent:'center',
         // borderColor:'#000000',
