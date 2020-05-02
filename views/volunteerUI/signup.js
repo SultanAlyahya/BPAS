@@ -1,8 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground,TextInput, ActivityIndicator} from 'react-native';
-import { Notifications } from 'expo';
-import * as Permissions from 'expo-permissions';
-import loginData from '../db/Userdb'
 import {saveData}  from '../db/Userdb'
 
 import PushNotification from "react-native-push-notification";

@@ -1,7 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
-import SettingsLine from '../components/settingsLine'
-import Header from '../components/header'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
 import {logout} from '../db/Userdb'
 
 export default class volunteerHomePage extends React.Component{
@@ -15,6 +13,8 @@ export default class volunteerHomePage extends React.Component{
         }
     }
 
+    //=========================================================
+
     toggleCalls =async()=>{
 
         const res = await fetch('https://assistance-system-back-end.herokuapp.com/volunteer/toggleCalls', {
@@ -27,11 +27,11 @@ export default class volunteerHomePage extends React.Component{
         })
         if(res.status == 200){
         this.setState({call:!this.state.call})
-        this.props.navigation.setParams({call: !this.state.call});
+        //this.props.navigation.setParams({call: !this.state.call});
         }
     }
 
-    //=======================================
+    //=========================================================
 
     logout =async()=>{
         this.setState({render:true})
@@ -53,7 +53,7 @@ export default class volunteerHomePage extends React.Component{
         this.setState({render:false})
     }
 
-    //=====================================
+    //=========================================================
 
     sendMessage =(type)=>{
         this.props.navigation.navigate('MessageP',{
@@ -63,6 +63,8 @@ export default class volunteerHomePage extends React.Component{
         })
     }
 
+    //=========================================================
+
     change=(change)=>{
         this.props.navigation.navigate(change,{
             token:this.state.token,
@@ -70,55 +72,55 @@ export default class volunteerHomePage extends React.Component{
 
     }
 
+    //=========================================================
+
     render(){
-
-        
-
-        
         return(
             <ScrollView style={styles.Scontainer}>
                 
-                {/* <FlatList
-                    data={settings}
-                    renderItem={({ item }) => item.id == '0'? <Header  title={item.title+' '+this.state.name} />: <SettingsLine title={item.id == '5'? item.title+' calls':item.title} enable={item.id == '5'? this.state.call:undefined} />}
-                    keyExtractor={item => item.id}
-                /> */}
                 <View style={styles.header}>
-                <Text style={styles.textHeader}>
-                    Hello {this.state.name}
-                </Text>
+                    <Text style={styles.textHeader}>
+                        Hello {this.state.name}
+                    </Text>
                 </View>
+
                 <View style={styles.body}>
+
                     <TouchableOpacity style={styles.buttons}
                     onPress={()=>this.sendMessage('help')}>
                         <Text style={styles.buttonsText}>
                             help
                         </Text>
                     </TouchableOpacity>
+
                     <TouchableOpacity style={styles.buttons}
                     onPress={()=>this.change('ChangePasswordP')}>
                         <Text style={styles.buttonsText}>
                             change password
                         </Text>
                     </TouchableOpacity>
+
                     <TouchableOpacity style={styles.buttons}
                     onPress={()=>this.change('ChangeNmaeP')}>
                         <Text style={styles.buttonsText}>
                             change name
                         </Text>
                     </TouchableOpacity>
+
                     <TouchableOpacity style={styles.buttons}
                     onPress={()=>this.sendMessage('feedback')}>
                         <Text style={styles.buttonsText}>
                             feedback to developers
                         </Text>
                     </TouchableOpacity>
+
                     <TouchableOpacity style={this.state.call?styles.enableButton:styles.disableButton}
                     onPress={()=>this.toggleCalls()}>
                         <Text style={styles.buttonsText}>
                             {this.state.call? 'Click to disable calls':'Click to enable calls'}
                         </Text>
                     </TouchableOpacity>
+                    
                     <TouchableOpacity style={styles.buttons}
                     onPress={()=>this.logout()}>
                         {

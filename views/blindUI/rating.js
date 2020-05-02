@@ -10,28 +10,25 @@ export default class rating extends React.Component{
             token:this.props.navigation.state.params.token,
             room:''
         };
-      }
-    async componentDidMount() {
-      
+    }
+
+    rate=async(rate)=>{
+        console.log(rate)
+        await fetch('https://assistance-system-back-end.herokuapp.com/rateVolunteer', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'token':this.state.token
+                },
+                body: JSON.stringify({
+                rate:rate
+                }),
+            })
+        this.props.navigation.navigate('blindHomePageP',{token:this.state.token})
     }
           
     render(){
-
-        const rate=async(rate)=>{
-            console.log(rate)
-            await fetch('https://assistance-system-back-end.herokuapp.com/rateVolunteer', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'token':this.state.token
-                    },
-                    body: JSON.stringify({
-                    rate:rate
-                    }),
-                })
-            this.props.navigation.navigate('blindHomePageP',{token:this.state.token})
-        }
         return(
             <View style={styles.containar}>
                 <View style={styles.lable}>
@@ -39,32 +36,32 @@ export default class rating extends React.Component{
                     ارجو التقييم من ١ الاسوء الى ٥ الافضل
                     </Text>
                 </View>
-               <TouchableOpacity onPress={()=>rate(1)}
+               <TouchableOpacity onPress={()=>this.rate(1)}
                style={styles.buttons}>
                    <Text style={styles.lableText}>1</Text>
                 </TouchableOpacity>
 
-               <TouchableOpacity onPress={()=>rate(2)}
+               <TouchableOpacity onPress={()=>this.rate(2)}
                style={styles.buttons}>
                    <Text style={styles.lableText}>2</Text>
                 </TouchableOpacity>
 
-               <TouchableOpacity onPress={()=>rate(3)}
+               <TouchableOpacity onPress={()=>this.rate(3)}
                style={styles.buttons}>
                    <Text style={styles.lableText}>3</Text>
                 </TouchableOpacity>
 
-               <TouchableOpacity onPress={()=>rate(4)}
+               <TouchableOpacity onPress={()=>this.rate(4)}
                style={styles.buttons}>
                    <Text style={styles.lableText}>4</Text>
                 </TouchableOpacity>
 
-               <TouchableOpacity onPress={()=>rate(5)}
+               <TouchableOpacity onPress={()=>this.rate(5)}
                style={styles.buttons}>
                    <Text style={styles.lableText}>5</Text>
                 </TouchableOpacity>
 
-               <TouchableOpacity onPress={()=>rate()}
+               <TouchableOpacity onPress={()=>this.rate()}
                style={styles.buttons}>
                    <Text style={styles.lableText}>تخطي التقييم</Text>
                 </TouchableOpacity>

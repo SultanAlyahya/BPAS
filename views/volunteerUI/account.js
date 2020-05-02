@@ -1,9 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
-import SettingsLine from '../reusableComponents/settingsLine'
-
-import PushNotification from "react-native-push-notification";
-import PushNotificationIOS from "@react-native-community/push-notification-ios";
 
 export default class volunteerHomePage extends React.Component{
     constructor(props){

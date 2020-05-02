@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import { fromTexture } from '@tensorflow/tfjs-react-native';
 import * as Speech from 'expo-speech';
 
 export default class textPage extends React.Component{
@@ -41,11 +40,12 @@ export default class textPage extends React.Component{
             this.setState({text:text, ready:true})
             }
             else{
-                this.setState({text:'لم يتم التقاط اي نص في الصورة'})
+                this.setState({text:'لم يتم التقاط اي نص في الصورة',ready:true})
             }
         }catch(error){
          console.log(error)
-        } 
+        }
+        this.setState({ready:true}) 
     }
 
     formatText=(res)=>{

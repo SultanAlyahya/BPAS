@@ -1,7 +1,6 @@
 import React from 'react';
 import { View,Text, StyleSheet, TouchableOpacity, ImageBackground, Settings, Image, TextInput, ActivityIndicator} from 'react-native';
-import {saveData, retrieveData} from '../db/Userdb'
-// import {Text} from '@material-ui/core'
+import {saveData} from '../db/Userdb'
 import PushNotification from "react-native-push-notification";
 
 
@@ -89,8 +88,8 @@ export default class login extends React.Component{
         //console.log(email, password)
         //let token = await Notifications.getExpoPushTokenAsync();
         try{
-        this.setState({loginState:true})
-        const res = await fetch('https://assistance-system-back-end.herokuapp.com/volunteer/Login', {
+            this.setState({loginState:true})
+            const res = await fetch('https://assistance-system-back-end.herokuapp.com/volunteer/Login', {
             method: 'POST',
             headers: {
                 "Accept": 'application/json',
@@ -101,24 +100,22 @@ export default class login extends React.Component{
                 password: password,
                 notificationToken:this.state.notificationToken
               }),
-        })
-        if(res.status !== 200){
-            this.setState({
-                errorLogin:'البريد الإلكتروني/ الرقم السري غير صحيح'
             })
-        }
-        else{
-            this.setState({
-                errorLogin:''
-            })
-            const resJ = await res.json()
-            this.setState({loginState:false})
-            saveData(res.headers.map.token,'volunteer')
-            console.log('token',res.headers.map.token)
-        //console.log(res.headers.map.token)
-            this.props.navigation.navigate('tabNavigaitonP',{
-                
-                
+            if(res.status !== 200){
+                this.setState({
+                    errorLogin:'البريد الإلكتروني/ الرقم السري غير صحيح'
+                })
+            }
+            else{
+                this.setState({
+                    errorLogin:''
+                })
+                const resJ = await res.json()
+                this.setState({loginState:false})
+                saveData(res.headers.map.token,'volunteer')
+                console.log('token',res.headers.map.token)
+                //console.log(res.headers.map.token)
+                this.props.navigation.navigate('tabNavigaitonP',{
                     token: res.headers.map.token,
                     name: resJ.name,
                     call: resJ.call,
@@ -127,21 +124,13 @@ export default class login extends React.Component{
                     numberOfCalls: resJ.numberOfCalls,
                     numberOfActiveVolunteers: resJ.numberOfActiveVolunteers,
                     numberOfVolunteers: resJ.numberOfVolunteers
-                
-            })
+                })
             }
-    }catch(error){
+        }catch(error){
         console.log(error)
-    }
-        
+        } 
     }
     
-    retrievelogin=async()=>{
-        const data = await retrieveData()
-        console.log(data.name)
-    }
-
-   
     render(){
         
         return(

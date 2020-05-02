@@ -1,16 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, Alert} from 'react-native';
-import { createAppContainer, } from 'react-navigation';
-// import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import settings from './volunteerSettings'
-//import { Ionicons } from '@expo/vector-icons';
+
 import SplashScreen from 'react-native-splash-screen'
 
 import { PieChart } from 'react-native-svg-charts'
 import { Text as TextAsg} from 'react-native-svg'
-//import styles from '../styles';
 import Svg, {Rect} from 'react-native-svg';
 
 
@@ -29,11 +26,16 @@ class volunteerHomePage extends React.Component{
 
         }
     }
+
+    //=========================================================
+
     componentDidMount() {
-        console.log('hide')
         SplashScreen.hide()
        
     }
+
+    //=========================================================
+
     render(){
         const data = [
             {

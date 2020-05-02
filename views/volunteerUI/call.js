@@ -2,9 +2,8 @@
 /* eslint-disable prettier/prettier */
 
 import React, { Component } from 'react';
-import { View, StyleSheet, NativeModules, ScrollView, Text, Dimensions, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, NativeModules, Text, Dimensions, TouchableOpacity, ActivityIndicator} from 'react-native';
 import { RtcEngine, AgoraView } from 'react-native-agora';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
 
 const { Agora } = NativeModules;                  //Define Agora object as a native module
@@ -122,51 +121,21 @@ export default class call extends Component {
     return (
       <View style={{ flex: 1 }}>
         {
-          this.state.peerIds.length > 1
-            ? <View style={{ flex: 1 }}>
-              <View style={{ height: dimensions.height * 3 / 4 - 50 }}>
-                <AgoraView style={{ flex: 1 }}
-                  remoteUid={this.state.peerIds[0]} mode={1} key={this.state.peerIds[0]} />
-              </View>
-              <View style={{ height: dimensions.height / 4 }}>
-                <ScrollView horizontal={true} decelerationRate={0}
-                  snapToInterval={dimensions.width / 2} snapToAlignment={'center'} style={{ width: dimensions.width, height: dimensions.height / 4 }}>
-                  {
-                    this.state.peerIds.slice(1).map((data) => (
-                      <TouchableOpacity style={{ width: dimensions.width / 2, height: dimensions.height / 4 }}
-                        onPress={() => this.peerClick(data)} key={data}>
-                        <AgoraView style={{ width: dimensions.width / 2, height: dimensions.height / 4 }}
-                          remoteUid={data} mode={1} key={data} />
-                      </TouchableOpacity>
-                    ))
-                  }
-                </ScrollView>
-              </View>
-            </View>
-            : this.state.peerIds.length > 0
+        
+             this.state.peerIds.length > 0
               ? <View style={{ height: dimensions.height - 50 }}>
                 <AgoraView style={{ flex: 1 }}
                   remoteUid={this.state.peerIds[0]} mode={1} />
               </View>
-              : <Text>No users connected</Text>
+              : 
+                <View style={styles.renderView}>
+                  <Text style={styles.renderText}>connecting...</Text>
+
+                  <View style={styles.render}>
+                    <ActivityIndicator size="large" color="#000000" />
+                  </View>
+                </View>
         }
-        {/* <View style={styles.buttonBar}>
-          <Icon.Button style={styles.iconStyle}
-            backgroundColor="#0093E9"
-            name={this.state.audMute ? 'mic-off' : 'mic'}
-            onPress={() => this.toggleAudio()}
-          />
-          <Icon.Button style={styles.iconStyle}
-            backgroundColor="#0093E9"
-            name="call-end"
-            onPress={() => this.endCall()}
-          />
-          <Icon.Button style={styles.iconStyle}
-            backgroundColor="#0093E9"
-            name={this.state.vidMute ? 'videocam-off' : 'videocam'}
-            onPress={() => this.toggleVideo()}
-          />
-        </View> */}
 
         <TouchableOpacity onPress={()=>this.endCall()}
           style={styles.endCallButton}>
@@ -218,14 +187,24 @@ const styles = StyleSheet.create({
   endCallButton:{
     height:'15%',
     backgroundColor:'#000000',
-    width:'100%',
-    //borderRadius:5,
+    width:'98%',
     justifyContent:'center',
     alignItems:'center',
-   // margin:2
-   position:'absolute',
-   bottom:0
+    position:'absolute',
+    bottom:0,
+    margin:'1%',
+    borderRadius:10
     
+  },
+  renderView:{
+    height:'85%',
+    backgroundColor:'#ffffff',
+    width:'100%',
+    justifyContent:'center',
+    alignItems:'center',
+  },
+  renderText:{
+    fontSize:40
   },
   endText:{
     fontSize:40,

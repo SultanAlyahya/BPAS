@@ -18,8 +18,11 @@ export default class blindHomePage extends React.Component{
             requestCameraAndAudioPermission().then(_ => {
               console.log('requested!');
             });
-          }
-      }
+        }
+    }
+
+    //=========================================================
+
     async componentDidMount() {
         try{
             SplashScreen.hide()
@@ -38,6 +41,8 @@ export default class blindHomePage extends React.Component{
         console.log('the room',this.state.room)
         console.log('the token', this.state.token)
     }
+
+    //=========================================================
 
     logout =async()=>{
         this.setState({render:true})
@@ -60,6 +65,8 @@ export default class blindHomePage extends React.Component{
         this.setState({render:false})
     }
 
+    //=========================================================
+
     voice =()=>{
         Speech.speak('الزر الاول اعلى الصفحة للاتصال بمتطوع فقط قم بالضغط على الزر ليقوم البحث عن متطوع')
         Speech.speak('الزر اللذي يليه لقراءة النص قم بالضغط عليه ثم قم بتصوير النص وسيتم قراءة اسمه صوتيا')
@@ -67,6 +74,7 @@ export default class blindHomePage extends React.Component{
         Speech.speak(' في اخر الصفحه من الجهة اليسرى زر تسجيل الغروج')
     }
 
+    //=========================================================
           
     render(){
         return(
