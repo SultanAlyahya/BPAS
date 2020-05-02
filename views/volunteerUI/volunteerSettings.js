@@ -112,7 +112,7 @@ export default class volunteerHomePage extends React.Component{
                     <TouchableOpacity style={this.state.call?styles.enableButton:styles.disableButton}
                     onPress={()=>this.toggleCalls()}>
                         <Text style={styles.buttonsText}>
-                            {this.state.call? 'Click to disable calls':'Click to anable calls'}
+                            {this.state.call? 'Click to disable calls':'Click to enable calls'}
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttons}
