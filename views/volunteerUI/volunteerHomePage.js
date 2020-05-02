@@ -29,30 +29,10 @@ class volunteerHomePage extends React.Component{
 
         }
     }
-    async componentDidMount() {
+    componentDidMount() {
+        console.log('hide')
         SplashScreen.hide()
-        // try{
-        // console.log('in')
-        // const res = await fetch('https://assistance-system-back-end.herokuapp.com/volunteer/getCall', {
-        //     method: 'POST',
-        //     headers: {
-        //         "Accept": 'application/json',
-        //         'Content-Type': 'application/json',
-        //         token:this.state.token
-        //       },
-        // })
-        // if(res.status == 200){
-        //     const data = await res.json()
-        //     console.log(data)
-        //     this.setState({
-        //         call:data.call,
-        //     })
-        // }
-        // }catch(error){
-        //     console.log(error)
-        // }
-
-        
+       
     }
     render(){
         const data = [
